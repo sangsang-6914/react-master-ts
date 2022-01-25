@@ -1,6 +1,9 @@
 import { createGlobalStyle } from 'styled-components'
 import Router from './routes/Router'
 import { ReactQueryDevtools } from 'react-query/devtools'
+import { useState } from 'react'
+import { ThemeProvider } from 'styled-components'
+import { theme, darkTheme, lightTheme } from './theme'
 
 const GlobalStyle = createGlobalStyle`
   @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap');
@@ -65,11 +68,23 @@ const GlobalStyle = createGlobalStyle`
   }
 `
 
+interface IFont {
+  age: number;
+  color?:string
+}
+
 function App () {
+  const [isDark, setIsDark] = useState(true)
+  const toggleDark = () => setIsDark(current => !current)
+  const font:IFont = {
+    age: 1234
+  }
   return <>
-    <GlobalStyle />
-    <Router />
-    <ReactQueryDevtools initialIsOpen={true} />
+    <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
+      <GlobalStyle />
+      <Router toggleDark={toggleDark} isDark={isDark}/>
+      <ReactQueryDevtools initialIsOpen={true} />
+    </ThemeProvider>
   </>
 }
 

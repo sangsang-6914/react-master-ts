@@ -14,10 +14,11 @@ interface IHIstorical {
 }
 
 interface CoinProps {
-    coinId: string
+    coinId: string;
+    isDark: boolean;
 }
 
-function Chart({coinId}: CoinProps) {
+function Chart({coinId, isDark}: CoinProps) {
     console.log(coinId)
     const {isLoading, data} = useQuery<IHIstorical[]>(["ohlcv", coinId], () => fetchCoinHistory(coinId))
     return <div>
@@ -32,7 +33,7 @@ function Chart({coinId}: CoinProps) {
                 ]}
                 options={{
                     theme: {
-                        mode: "dark"
+                        mode: isDark ? 'dark' : 'light'
                     },
                     chart: {
                         background: "transparent",
