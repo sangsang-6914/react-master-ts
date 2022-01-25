@@ -5,6 +5,8 @@ import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import { fetchCoins } from '../api'
 import { Helmet } from 'react-helmet'
+import { useSetRecoilState } from 'recoil'
+import { isDarkAtom } from '../atoms'
 
 const Container = styled.div`
     padding: 0px 20px;
@@ -67,26 +69,13 @@ interface ICoin {
     type: string,
 }
 
-interface ICoinsProps {
-    toggleDark: () => void;
-    isDark: boolean;
-}
 
-function Coins({toggleDark}: ICoinsProps) {
-    // const [coins, setCoins] = useState<CoinInterface[]>([])
-    // const [loading, setLoading] = useState(true)
-    // const getCoins = async () => {
-    //     const response = await fetch('https://api.coinpaprika.com/v1/coins')
-    //     const json = await response.json()
-    //     console.log(json)
-    //     setCoins(json.slice(0, 100))
-    //     setLoading(false)
-    // }
-    // console.log(coins)
-    // useEffect(() => {
-    //     getCoins()
-    // }, [])
+function Coins() {
     const {isLoading, data} = useQuery<ICoin[]>("allCoins", fetchCoins)
+    const setDarkAtom = useSetRecoilState(isDarkAtom)
+    const toggleDarkAtom = () => {
+        setDarkAtom(current => !current)
+    }
     return (
         <Container>
             <Helmet>
@@ -94,7 +83,7 @@ function Coins({toggleDark}: ICoinsProps) {
             </Helmet>
             <Header>
                 <Title>코인</Title>
-                <button onClick={toggleDark}>Toggle Mode</button>
+                <button onClick={toggleDarkAtom}>Toggle Mode</button>
             </Header>
             {isLoading ? (
                 <Loader>Loading...</Loader>
